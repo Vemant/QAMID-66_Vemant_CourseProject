@@ -1,6 +1,6 @@
 ИНСТРУКЦИЯ К ПРОЕКТУ:
 
-Файлф appveyor.yml, build.gradle, Plan.md, README.md, Report.md, Summary.md 
+Файлы appveyor.yml, build.gradle, Plan.md, README.md, Report.md, Summary.md 
 лежат в головной папке проекта. 
 
 Файлы с автотестами будут лежать в 
