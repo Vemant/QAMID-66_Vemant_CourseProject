@@ -325,7 +325,7 @@ public class MonthPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-    //    ========= НИЖЕ БАГ НЕПОИСК ТОГО, ЧТО ЕСТЬ ============
+    //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
     // Невалидный тест МЕСЯЦ, 123
     // (крайнее невалидное значение кол-ва символов)
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -346,14 +346,9 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("123");
-        $(byText("Месяц"))
-                .parent()
-                .find("input")
-                .find("value")
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16))
-                .shouldHave(exactText("12"));
+                .setValue("123")
+                .shouldHave(Condition.value
+                        ("12"));
         $(byText("Год")).parent()
                 .find("input")
                 .setValue("26");

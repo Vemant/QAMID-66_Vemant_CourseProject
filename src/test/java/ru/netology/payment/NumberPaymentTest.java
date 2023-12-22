@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selectors.byText;
 
 public class NumberPaymentTest {
     @BeforeEach
@@ -133,7 +134,7 @@ public class NumberPaymentTest {
                 .shouldBe(Condition.visible);
     }
 
-    //    ========= НИЖЕ БАГ НЕПОИСК ТОГО, ЧТО ЕСТЬ ============
+    //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
     // Невалидный тест НОМЕР КАРТЫ, 17 цифр
     // (крайнее невалидное значение)
 //    НОМЕР КАРТЫ: 1111 2222 3333 44445
@@ -152,14 +153,9 @@ public class NumberPaymentTest {
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
                 .find("input")
-                .setValue("1111 2222 3333 44445");
-        $(byText("Номер карты"))
-                .parent()
-                .find("input")
-                .find("value")
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16))
-                .shouldHave(exactText("1111 2222 3333 4444"));
+                .setValue("1111 2222 3333 44445")
+                .shouldHave(Condition.value
+                        ("1111 2222 3333 4444"));
         $(byText("Месяц")).parent()
                 .find("input")
                 .setValue("03");

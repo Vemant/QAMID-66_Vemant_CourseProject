@@ -89,8 +89,8 @@ public class CvvPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-    //    ========= НИЖЕ БАГ НЕПОИСК ТОГО, ЧТО ЕСТЬ ============
-    // Невалидный тест CVV,
+    //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
+    // Невалидный тест CVV, 4 символа
     // крайнее невалидное значение кол-ва символов
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
 //    МЕСЯЦ: 03
@@ -119,14 +119,9 @@ public class CvvPaymentTest {
                 .setValue("IVAN IVANOV");
         $(byText("CVC/CVV")).parent()
                 .find("input")
-                .setValue("4567");
-        $(byText("CVC/CVV"))
-                .parent()
-                .find("input")
-                .find("value")
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16))
-                .shouldHave(exactText("456"));
+                .setValue("4567")
+                .shouldHave(Condition.value
+                        ("456"));
         $(byText("Продолжить")).click();
         $(".notification__title")
                 .shouldBe(Condition.visible,

@@ -327,7 +327,7 @@ public class YearPaymentTest {
                 .shouldBe(Condition.visible);
     }
 
-    //    ========= НИЖЕ БАГ НЕПОИСК ТОГО, ЧТО ЕСТЬ ============
+    //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
     // Невалидный тест ГОД, 123
     // (крайнее невалидное значение кол-ва символов)
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -351,14 +351,9 @@ public class YearPaymentTest {
                 .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("267");
-        $(byText("Год"))
-                .parent()
-                .find("input")
-                .find("value")
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16))
-                .shouldHave(exactText("26"));
+                .setValue("267")
+                .shouldHave(Condition.value
+                        ("26"));
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -366,10 +361,15 @@ public class YearPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Год")).parent()
-                .shouldHave(Condition.text("Неверный формат"),
+        $(".notification__title")
+                .shouldBe(Condition.visible,
                         Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
+                .shouldHave(exactText("Успешно"));
+        $(".notification__content")
+                .shouldBe(Condition.visible,
+                        Duration.ofSeconds(16))
+                .shouldHave(exactText("Операция одобрена " +
+                        "Банком."));
     }
 
     // Невалидный тест ГОД,
