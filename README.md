@@ -1,7 +1,11 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/hgynbv7k2329bre4?svg=true)](https://ci.appveyor.com/project/Vemant/qamid-66-vemant-courseproject)
+
 ИНСТРУКЦИЯ К ПРОЕКТУ:
 
-Файлы appveyor.yml, build.gradle, Plan.md, README.md, Report.md, Summary.md 
-лежат в головной папке проекта. 
+Запуск контейнера: java -jar ./artifacts/aqa-shop.jar
+
+Файлы appveyor.yml, build.gradle, Plan.md, README.md, Report.md, Summary.md, 
+docker-compose.yml лежат в головной папке проекта. 
 
 Файлы с автотестами будут лежать в 
 src/test/java/ru/netology/autopayment/PaymentAutoTest.java
