@@ -1,6 +1,6 @@
-package ru.netology.test;
+package ru.netology.autopayment;
 
-public class PaymentAutoTest {
+public class NumberAutoPaymentTest {
     // проверка поля НОМЕР КАРТЫ
     // на автоматический ввод пробелов
     // после 4-й, 8-й и 12-й цифр

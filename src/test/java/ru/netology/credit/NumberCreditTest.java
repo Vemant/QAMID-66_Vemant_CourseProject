@@ -1,392 +1,404 @@
 package ru.netology.credit;
 
+import com.codeborne.selenide.Condition;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.value;
+import static com.codeborne.selenide.Selectors.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
+
 public class NumberCreditTest {
-    //    Валидный тест
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
+        @BeforeEach
+        void setup() {
+            open("http://localhost:8080");
+        }
+        //    ========= НИЖЕ БАГ FAILED НЕ ВЫПОЛНЯЕТСЯ ПОЧЕМУ-ТО ============
+        // Невалидный тест НОМЕР КАРТЫ,
+        // не предусмотренный сервером
+//    НОМЕР КАРТЫ: 1234 5678 9012 3456
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "non-provided card number")
+        public void errorNonProvidedCardNumber() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("1234 5678 9012 3456");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(".notification__title")
+                    .shouldHave(Condition.text("Ошибка"),
+                            Duration.ofSeconds(31))
+                    .shouldBe(Condition.visible);
+            $(".notification__content")
+                    .shouldHave(Condition.text("Ошибка! " +
+                                    "Банк отказал в проведении " +
+                                    "операции."),
+                            Duration.ofSeconds(31))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Валидный тест, МЕСЯЦ 01 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 01
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, МЕСЯЦ 02 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 02
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, МЕСЯЦ 11 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 11
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, МЕСЯЦ 12 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 12
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, ГОД 24 (крайнее валидное значение)
-    // НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 24
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, ГОД 25 (крайнее валидное значение)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 25
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, ГОД 48 (крайнее валидное значение)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 48
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, ГОД 49 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 49
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Валидный тест, ВЛАДЕЛЕЦ из 2-х символов, 1 пробел (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: I V
-//    CVC/CVV: 456
-
-    // Валидный тест, ВЛАДЕЛЕЦ из 3-х символов, 1 пробел (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IV A
-//    CVC/CVV: 456
-
-    // Валидный тест, ВЛАДЕЛЕЦ из 49 символов, 1 пробел (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVANIVANOVIVANIVANOV IVANIVANOVIVANIVANOVIVANIVAN
-//    CVC/CVV: 456
-
-    // Валидный тест, ВЛАДЕЛЕЦ из 50 символов, 1 пробел (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVANIVANOVIVANIVANOV IVANIVANOVIVANIVANOVIVANIVANO
-//    CVC/CVV: 456
-
-    // Невалидный тест НОМЕР КАРТЫ, поле пустое
+        //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
+        // Невалидный тест НОМЕР КАРТЫ, поле пустое
 //    НОМЕР КАРТЫ:
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "empty card field")
+        public void errorCardFieldEmpty() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Поле " +
+                                    "обязательно для заполнения"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 15 цифр (крайнее невалидное значение)
+        // Невалидный тест НОМЕР КАРТЫ, 15 цифр
+        // (крайнее невалидное значение)
 //    НОМЕР КАРТЫ: 1111 2222 3333 444
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "15 symbols in card field")
+        public void errorCardField15Symbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("1111 2222 3333 444");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Неверный формат"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 17 цифр (крайнее невалидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 44444
+        //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
+        // Невалидный тест НОМЕР КАРТЫ, 17 цифр
+        // (крайнее невалидное значение)
+//    НОМЕР КАРТЫ: 1111 2222 3333 44445
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should successful make payment, " +
+                "because it is possible to enter only " +
+                "16 characters out of 17")
+        public void errorCardField17Symbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("1111 2222 3333 44445")
+                    .shouldHave(Condition.value
+                            ("1111 2222 3333 4444"));
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(".notification__title")
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16))
+                    .shouldHave(exactText("Успешно"));
+            $(".notification__content")
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16))
+                    .shouldHave(exactText("Операция одобрена " +
+                            "Банком."));
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 16 лат символов
+        //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
+        // Невалидный тест НОМЕР КАРТЫ, 16 лат символов
 //    НОМЕР КАРТЫ: aaaa bbbb cccc dddd
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "latin symbols in card field")
+        public void errorCardFieldLatinSymbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("aaaa bbbb cccc dddd");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Поле " +
+                                    "обязательно для заполнения"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 16 кир символов
+        //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
+        // Невалидный тест НОМЕР КАРТЫ, 16 кир символов
 //    НОМЕР КАРТЫ: аааа бббб вввв гггг
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "cyrillic symbols in card field")
+        public void errorCardFieldCyrillicSymbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("аааа бббб вввв гггг");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Поле " +
+                                    "обязательно для заполнения"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 16 знаков препинания
+        //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
+        // Невалидный тест НОМЕР КАРТЫ, 16 знаков препинания
 //    НОМЕР КАРТЫ: !!!! %%%% ???? ....
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "punctuation marks in card field")
+        public void errorCardFieldPunctuationMarks() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("!!!! %%%% ???? ....");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Поле " +
+                                    "обязательно для заполнения"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 16 цифр+латсимволов
+        // Невалидный тест НОМЕР КАРТЫ, 16 цифр+латсимволов
 //    НОМЕР КАРТЫ: 11aa 22bb 33cc 44dd
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "numbers and latin symbols in card field")
+        public void errorCardFieldNumbersAndLatinSymbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("11aa 22bb 33cc 44dd");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Неверный формат"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 16 цифр+кирсимволов
+        // Невалидный тест НОМЕР КАРТЫ, 16 цифр+кирсимволов
 //    НОМЕР КАРТЫ: 11аа 22бб 33вв 44гг
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
+        @Test
+        @DisplayName("Should get error, " +
+                "numbers and cyrillic symbols in card field")
+        public void errorCardFieldNumbersAndCyrillicSymbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("11аа 22бб 33вв 44гг");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Неверный формат"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
 
-    // Невалидный тест НОМЕР КАРТЫ, 16 цифр+препзнаков
+        // Невалидный тест НОМЕР КАРТЫ, 16 цифр+препзнаков
 //    НОМЕР КАРТЫ: 11!! 22%% 33?? 44..
 //    МЕСЯЦ: 03
-//    ГОД: 30
+//    ГОД: 26
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, поле пустое
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ:
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-// Невалидный тест МЕСЯЦ, 00 (крайнее невалидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 00
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, 13 (крайнее невалидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 01
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, 3 (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 3
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, 123 (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 123
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, комбинация валидной длины латинских символов и цифр
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: h3
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, комбинация валидной длины кириллических символов и цифр
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: ш3
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест МЕСЯЦ, комбинация валидной длины знаков препинания и цифр
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: !3
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-
-    // Невалидный тест ГОД, поле пустое
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД:
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, 23 (крайнее невалидное значение)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 23
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, 50 (крайнее невалидное значение)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 50
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, 5 (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 5
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, 123 (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 123
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, комбинация валидной длины латинских символов и цифр
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 5h
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, комбинация валидной длины кириллических символов и цифр
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 5д
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ГОД, комбинация валидной длины знаков препинания и цифр
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 5?
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-
-    // Невалидный тест ВЛАДЕЛЕЦ, поле пустое
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ:
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, 51 латсимвол с пробелом (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVANIVANOVIVANIVANOV IVANIVANOVIVANIVANOVIVANIVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: N
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, пробел
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ:
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, валидное кол-во символов без пробелов
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVANIVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, валидное кол-во символов с двумя пробелами
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVA NOV
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, комбинация валидной длины из лат- и кирсимволов
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN ИВАНОВ
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, комбинация валидной длины из латсимволов и цифр
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IV5N IVA72V
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, комбинация валидной длины из латсимволов и знаков препинания
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IV?! IVAN%V
-//    CVC/CVV: 456
-
-    // Невалидный тест ВЛАДЕЛЕЦ, неверный регистр
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: ivan ivanov
-//    CVC/CVV: 456
-
-
-    // Невалидный тест CVV, поле пустое
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
-
-    // Невалидный тест CVV, (крайнее невалидное значение кол-ва символов)
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 45
-
-    // Невалидный тест CVV, крайнее невалидное значение кол-ва символов
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 4567
-
-    // Невалидный тест CVV, цифры + латсимволы
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 4j5
-
-    // Невалидный тест CVV, цифры + кирсимволы
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 4д5
-
-    // Невалидный тест CVV, цифры + знаки препинания
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 4&5
-
-    // Невалидный тест CVV, три пробела
-    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 03
-//    ГОД: 30
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV:
-
-}
+        @Test
+        @DisplayName("Should get error, " +
+                "numbers and punctuation marks in card field")
+        public void errorCardFieldNumbersAndPunctuationMarksSymbols() {
+            $(byText("Купить в кредит")).click();
+            $(byText("Кредит по данным карты"))
+                    .shouldBe(Condition.visible,
+                            Duration.ofSeconds(16));
+            $(byText("Номер карты")).parent()
+                    .find("input")
+                    .setValue("11!! 22%% 33?? 44..");
+            $(byText("Месяц")).parent()
+                    .find("input")
+                    .setValue("03");
+            $(byText("Год")).parent()
+                    .find("input")
+                    .setValue("26");
+            $(byText("Владелец")).parent()
+                    .find("input")
+                    .setValue("IVAN IVANOV");
+            $(byText("CVC/CVV")).parent()
+                    .find("input")
+                    .setValue("456");
+            $(byText("Продолжить")).click();
+            $(byText("Номер карты")).parent()
+                    .shouldHave(Condition.text("Неверный формат"),
+                            Duration.ofSeconds(16))
+                    .shouldBe(Condition.visible);
+        }
+    }
