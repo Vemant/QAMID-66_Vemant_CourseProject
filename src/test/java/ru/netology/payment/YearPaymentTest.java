@@ -216,7 +216,7 @@ public class YearPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-    //    ========= НИЖЕ БАГ НАДПИСЬ НЕ ТАМ ============
+
     // Невалидный тест ГОД, 23 (крайнее невалидное значение)
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
 //    МЕСЯЦ: 03
@@ -248,8 +248,7 @@ public class YearPaymentTest {
                 .setValue("456");
         $(byText("Продолжить")).click();
         $(byText("Год")).parent()
-                .shouldHave(Condition.text("Неверно указан " +
-                                "срок действия карты"),
+                .shouldHave(Condition.text("Истёк срок действия карты"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
