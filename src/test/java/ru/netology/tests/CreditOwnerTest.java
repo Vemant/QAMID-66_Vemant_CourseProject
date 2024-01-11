@@ -1,9 +1,9 @@
 package ru.netology.credit;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 
@@ -16,6 +16,16 @@ public class OwnerCreditTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
+    }
+
+    @BeforeAll
+    static void serUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     // Валидный тест, ВЛАДЕЛЕЦ из 2-х символов, 1 пробел
@@ -142,6 +152,7 @@ public class OwnerCreditTest {
                 .shouldHave(exactText("Операция одобрена " +
                         "Банком."));
     }
+
     // Валидный тест, ВЛАДЕЛЕЦ дефис справа от пробела,
     //    НОМЕР КАРТЫ: 1111 2222 3333 4444
 //    МЕСЯЦ: 03
@@ -182,6 +193,7 @@ public class OwnerCreditTest {
                 .shouldHave(exactText("Операция одобрена " +
                         "Банком."));
     }
+
     // Валидный тест, ВЛАДЕЛЕЦ по 1-му дефису
     // слева и справа от пробела,
     //    НОМЕР КАРТЫ: 1111 2222 3333 4444
@@ -408,6 +420,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // валидное кол-во символов с дефисом без пробелов
@@ -445,6 +458,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // валидное кол-во символов с 2-мя дефисами без пробелов
@@ -482,6 +496,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // валидное кол-во символов с 2-мя дефисами
@@ -520,6 +535,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // валидное кол-во символов с 2-мя дефисами
@@ -558,6 +574,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // комбинация валидной длины из лат- и кирсимволов
@@ -595,6 +612,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // комбинация валидной длины из латсимволов и цифр
@@ -632,6 +650,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // комбинация валидной длины
@@ -670,6 +689,7 @@ public class OwnerCreditTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
     // Невалидный тест ВЛАДЕЛЕЦ,
     // неверный регистр

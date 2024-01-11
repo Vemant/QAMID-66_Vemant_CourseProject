@@ -1,9 +1,9 @@
 package ru.netology.autopayment;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import ru.netology.data.DataGenerator;
 
 import java.time.Duration;
@@ -12,52 +12,31 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class MonthAutoPaymentTest {
+public class CvvAutoPaymentTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
     }
 
+    @BeforeAll
+    static void serUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
-    // Невалидный тест МЕСЯЦ, поле пустое
+    //    ========= НИЖЕ БАГ НАДПИСЬ НЕ ТАМ ============
+    // Невалидный тест CVV, поле пустое
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: empty
-
+//    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "empty month field")
-    public void errorEmptyMonthField() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
-        $(byText("Номер карты")).parent()
-                .find("input")
-                .setValue(DataGenerator.getNumberOfErrors());
-        $(byText("Год")).parent()
-                .find("input")
-                .setValue(DataGenerator.getRandomValidYear());
-        $(byText("Владелец")).parent()
-                .find("input")
-                .setValue(DataGenerator.getRandomValidOwner());
-        $(byText("CVC/CVV")).parent()
-                .find("input")
-                .setValue(DataGenerator.getRandomValidCvv());
-        $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
-                .shouldHave(Condition.text("Поле обязательно для заполнения"),
-                        Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
-    }
-
-
-    // Невалидный тест МЕСЯЦ, 00 (крайнее невалидное значение)
-//    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: random error
-    @Test
-    @DisplayName("Should get error, " +
-            "error month")
-    public void errorMonthIsInvalid() {
+            "empty CVV field")
+    public void errorEmptyCvvField() {
         $(byText("Купить")).click();
         $(byText("Оплата по карте"))
                 .shouldBe(Condition.visible,
@@ -67,7 +46,39 @@ public class MonthAutoPaymentTest {
                 .setValue(DataGenerator.getNumberOfErrors());
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomErrorMonth());
+                .setValue(DataGenerator.getRandomValidMonth());
+        $(byText("Год")).parent()
+                .find("input")
+                .setValue(DataGenerator.getRandomValidYear());
+        $(byText("Владелец")).parent()
+                .find("input")
+                .setValue(DataGenerator.getRandomValidOwner());
+        $(byText("Продолжить")).click();
+        $(byText("CVC/CVV")).parent()
+                .shouldHave(Condition.text("Поле обязательно" +
+                                " для заполнения"),
+                        Duration.ofSeconds(16))
+                .shouldBe(Condition.visible);
+    }
+
+    // Невалидный тест CVV,
+    // крайнее невалидное значение кол-ва символов
+    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
+//    CVC/CVV: 45
+    @Test
+    @DisplayName("Should get error, " +
+            "2 symbols in CVV")
+    public void errorCvvTwoSymbols() {
+        $(byText("Купить")).click();
+        $(byText("Оплата по карте"))
+                .shouldBe(Condition.visible,
+                        Duration.ofSeconds(16));
+        $(byText("Номер карты")).parent()
+                .find("input")
+                .setValue(DataGenerator.getNumberOfErrors());
+        $(byText("Месяц")).parent()
+                .find("input")
+                .setValue(DataGenerator.getRandomValidMonth());
         $(byText("Год")).parent()
                 .find("input")
                 .setValue(DataGenerator.getRandomValidYear());
@@ -76,13 +87,11 @@ public class MonthAutoPaymentTest {
                 .setValue(DataGenerator.getRandomValidOwner());
         $(byText("CVC/CVV")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidCvv());
+                .setValue(DataGenerator.getRandomErrorCvv());
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
-                .shouldHave(Condition.text("Неверно указан " +
-                                "срок действия карты"),
+        $(byText("CVC/CVV")).parent()
+                .shouldHave(Condition.text("Неверный формат"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-
 }

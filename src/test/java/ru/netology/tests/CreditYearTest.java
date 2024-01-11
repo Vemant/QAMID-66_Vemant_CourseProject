@@ -1,9 +1,9 @@
-package ru.netology.payment;
+package ru.netology.credit;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 
@@ -12,24 +12,34 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class MonthPaymentTest {
+public class YearCreditTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
     }
 
-    // Валидный тест, МЕСЯЦ 01 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 01
-//    ГОД: 26
+    @BeforeAll
+    static void serUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
+    // Валидный тест, ГОД 24 (крайнее валидное значение)
+    // НОМЕР КАРТЫ: 1111 2222 3333 4444
+//    МЕСЯЦ: 03
+//    ГОД: 24
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should successful make payment, " +
-            "Month = 01")
-    public void successExtremeValidValueMonth01() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "Year = 24")
+    public void successExtremeValidValueYear24() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -37,10 +47,10 @@ public class MonthPaymentTest {
                 .setValue("1111 2222 3333 4444");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("01");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("24");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -59,18 +69,18 @@ public class MonthPaymentTest {
                         "Банком."));
     }
 
-    // Валидный тест, МЕСЯЦ 02 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 02
-//    ГОД: 26
+    // Валидный тест, ГОД 25 (крайнее валидное значение)
+    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
+//    МЕСЯЦ: 03
+//    ГОД: 25
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should successful make payment, " +
-            "Month = 02")
-    public void successExtremeValidValueMonth02() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "Year = 25")
+    public void successExtremeValidValueYear25() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -78,10 +88,10 @@ public class MonthPaymentTest {
                 .setValue("1111 2222 3333 4444");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("02");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("25");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -100,18 +110,18 @@ public class MonthPaymentTest {
                         "Банком."));
     }
 
-    // Валидный тест, МЕСЯЦ 11 (крайнее валидное значение)
-//    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 11
-//    ГОД: 26
+    // Валидный тест, ГОД 27 (крайнее валидное значение)
+    //    НОМЕР КАРТЫ: 1111 2222 3333 4444
+//    МЕСЯЦ: 03
+//    ГОД: 28
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should successful make payment, " +
-            "Month = 11")
-    public void successExtremeValidValueMonth11() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "Year = 27")
+    public void successExtremeValidValueYear27() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -119,10 +129,10 @@ public class MonthPaymentTest {
                 .setValue("1111 2222 3333 4444");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("11");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("27");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -141,18 +151,18 @@ public class MonthPaymentTest {
                         "Банком."));
     }
 
-    // Валидный тест, МЕСЯЦ 12 (крайнее валидное значение)
+    // Валидный тест, ГОД 28 (крайнее валидное значение)
 //    НОМЕР КАРТЫ: 1111 2222 3333 4444
-//    МЕСЯЦ: 12
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД: 28
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should successful make payment, " +
-            "Month = 12")
-    public void successExtremeValidValueMonth12() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "Year = 28")
+    public void successExtremeValidValueYear28() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -160,10 +170,10 @@ public class MonthPaymentTest {
                 .setValue("1111 2222 3333 4444");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("12");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("28");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -183,26 +193,26 @@ public class MonthPaymentTest {
     }
 
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
-    // Невалидный тест МЕСЯЦ, поле пустое
+    // Невалидный тест ГОД, поле пустое
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ:
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД:
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "empty month field")
-    public void errorEmptyMonthField() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "empty year field")
+    public void errorEmptyYearField() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
                 .find("input")
                 .setValue("5555 6666 7777 8888");
-        $(byText("Год")).parent()
+        $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("03");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -210,25 +220,26 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
-                .shouldHave(Condition.text("Поле обязательно для заполнения"),
+        $(byText("Год")).parent()
+                .shouldHave(Condition.text("Поле " +
+                                "обязательно для заполнения"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
 
-    //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
-    // Невалидный тест МЕСЯЦ, 00 (крайнее невалидное значение)
-//    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: 00
-//    ГОД: 26
+    //    ========= НИЖЕ БАГ НАДПИСЬ НЕ ТАМ ============
+    // Невалидный тест ГОД, 23 (крайнее невалидное значение)
+    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
+//    МЕСЯЦ: 03
+//    ГОД: 23
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "month = 00")
-    public void errorMonthIsZero() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "year = 23")
+    public void errorYearIs23() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -236,10 +247,10 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("00");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("23");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -247,24 +258,25 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
+        $(byText("Год")).parent()
                 .shouldHave(Condition.text("Неверно указан " +
                                 "срок действия карты"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-    // Невалидный тест МЕСЯЦ, 13 (крайнее невалидное значение)
-//    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: 01
-//    ГОД: 26
+
+    // Невалидный тест ГОД, 29 (крайнее невалидное значение)
+    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
+//    МЕСЯЦ: 03
+//    ГОД: 29
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "month = 13")
-    public void errorMonthIs13() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "year = 29")
+    public void errorYearIs29() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -272,10 +284,10 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("13");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("29");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -283,25 +295,26 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
+        $(byText("Год")).parent()
                 .shouldHave(Condition.text("Неверно указан " +
                                 "срок действия карты"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-    // Невалидный тест МЕСЯЦ, 3
+
+    // Невалидный тест ГОД, 5
     // (крайнее невалидное значение кол-ва символов)
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: 3
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД: 5
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "month = 3")
-    public void errorMonthIs3Without0() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "year = 5")
+    public void errorYearIs5Without0() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -309,10 +322,10 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("3");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("5");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -320,25 +333,26 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
+        $(byText("Год")).parent()
                 .shouldHave(Condition.text("Неверный формат"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
-    // Невалидный тест МЕСЯЦ, 123
+    // Невалидный тест ГОД, 123
     // (крайнее невалидное значение кол-ва символов)
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: 123
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД: 267
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should change value and print success, " +
-            "3 symbols in month")
-    public void changeValueAndSuccessThreeSymbolsInMonth() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "3 symbols in year")
+    public void changeValueAndSuccessThreeSymbolsInYear() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -346,12 +360,12 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("123")
-                .shouldHave(Condition.value
-                        ("12"));
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("267")
+                .shouldHave(Condition.value
+                        ("26"));
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -369,19 +383,20 @@ public class MonthPaymentTest {
                 .shouldHave(exactText("Операция одобрена " +
                         "Банком."));
     }
-    // Невалидный тест МЕСЯЦ, комбинация валидной длины
-    // латинских символов и цифр
+
+    // Невалидный тест ГОД,
+    // комбинация валидной длины латинских символов и цифр
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: h3
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД: 5h
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "numbers and latin symbols in month field")
-    public void errorMonthFieldNumbersAndLatinSymbols() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "numbers and latin symbols in year field")
+    public void errorYearFieldNumbersAndLatinSymbols() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -389,10 +404,10 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("h3");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("5h");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -400,25 +415,25 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
+        $(byText("Год")).parent()
                 .shouldHave(Condition.text("Неверный формат"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
 
-    // Невалидный тест МЕСЯЦ, комбинация валидной длины
-    // кириллических символов и цифр
+    // Невалидный тест ГОД,
+    // комбинация валидной длины кириллических символов и цифр
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: ш3
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД: 5д
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
-            "numbers and cyrillic symbols in month field")
-    public void errorMonthFieldNumbersAndCyrillicSymbols() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+            "numbers and cyrillic symbols in year field")
+    public void errorYearFieldNumbersAndCyrillicSymbols() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -426,10 +441,10 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("ш3");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("5д");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -437,25 +452,25 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
+        $(byText("Год")).parent()
                 .shouldHave(Condition.text("Неверный формат"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
 
-    // Невалидный тест МЕСЯЦ, комбинация валидной длины
-    // знаков препинания и цифр
+    // Невалидный тест ГОД,
+    // комбинация валидной длины знаков препинания и цифр
 //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: !3
-//    ГОД: 26
+//    МЕСЯЦ: 03
+//    ГОД: 5?
 //    ВЛАДЕЛЕЦ: IVAN IVANOV
 //    CVC/CVV: 456
     @Test
-    @DisplayName("Should get error, numbers " +
-            "and punctuation marks in month field")
-    public void errorMonthFieldNumbersAndPunctMarksSymbols() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+    @DisplayName("Should get error, " +
+            "numbers and punctuation marks in year field")
+    public void errorYearFieldNumbersAndPunctMarksSymbols() {
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -463,10 +478,10 @@ public class MonthPaymentTest {
                 .setValue("5555 6666 7777 8888");
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue("!3");
+                .setValue("03");
         $(byText("Год")).parent()
                 .find("input")
-                .setValue("26");
+                .setValue("5?");
         $(byText("Владелец")).parent()
                 .find("input")
                 .setValue("IVAN IVANOV");
@@ -474,10 +489,9 @@ public class MonthPaymentTest {
                 .find("input")
                 .setValue("456");
         $(byText("Продолжить")).click();
-        $(byText("Месяц")).parent()
+        $(byText("Год")).parent()
                 .shouldHave(Condition.text("Неверный формат"),
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
-
 }

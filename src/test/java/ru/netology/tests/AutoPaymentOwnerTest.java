@@ -1,9 +1,9 @@
 package ru.netology.autopayment;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import ru.netology.data.DataGenerator;
 
 import java.time.Duration;
@@ -18,10 +18,19 @@ public class OwnerAutoPaymentTest {
         open("http://localhost:8080");
     }
 
+    @BeforeAll
+    static void serUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     // Невалидный тест ВЛАДЕЛЕЦ, поле пустое
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
 //    ВЛАДЕЛЕЦ: empty
-
     @Test
     @DisplayName("Should get error, " +
             "empty Owner field")

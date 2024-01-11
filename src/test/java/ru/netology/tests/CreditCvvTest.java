@@ -1,9 +1,9 @@
-package ru.netology.payment;
+package ru.netology.credit;
 
 import com.codeborne.selenide.Condition;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 
@@ -12,10 +12,20 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class CvvPaymentTest {
+public class CvvCreditTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
+    }
+
+    @BeforeAll
+    static void serUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
@@ -30,8 +40,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "empty CVV field")
     public void errorEmptyCvvField() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -53,6 +63,7 @@ public class CvvPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     // Невалидный тест CVV,
     // крайнее невалидное значение кол-ва символов
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -64,8 +75,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "2 symbols in CVV")
     public void errorCvvTwoSymbols() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -89,6 +100,7 @@ public class CvvPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     //    |||||||||| БЫЛ НЕПОИСК ||||||||||||
     // Невалидный тест CVV, 4 символа
     // крайнее невалидное значение кол-ва символов
@@ -101,8 +113,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "4 symbols in CVV")
     public void errorCvvFourSymbols() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -133,6 +145,7 @@ public class CvvPaymentTest {
                 .shouldHave(exactText("Операция одобрена " +
                         "Банком."));
     }
+
     // Невалидный тест CVV,
     // цифры + латсимволы
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -144,8 +157,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "numbers and latin symbols in CVV")
     public void errorCvvLatinSymbolsAndNumbers() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -169,6 +182,7 @@ public class CvvPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     // Невалидный тест CVV,
     // цифры + кирсимволы
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -180,8 +194,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "numbers and cyrillic symbols in CVv")
     public void errorCvvNumbersAndCyrillicSymbols() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -205,6 +219,7 @@ public class CvvPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     // Невалидный тест CVV,
     // цифры + знаки препинания
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -216,8 +231,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "numbers and punctuations in CVv")
     public void errorCvvNumbersAndPunctuations() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
@@ -241,6 +256,7 @@ public class CvvPaymentTest {
                         Duration.ofSeconds(16))
                 .shouldBe(Condition.visible);
     }
+
     // Невалидный тест CVV,
     // три пробела
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
@@ -252,8 +268,8 @@ public class CvvPaymentTest {
     @DisplayName("Should get error, " +
             "3 spaces in Cvv")
     public void errorCvvThreeSpaces() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
+        $(byText("Купить в кредит")).click();
+        $(byText("Кредит по данным карты"))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
