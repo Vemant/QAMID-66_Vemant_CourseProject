@@ -1,10 +1,10 @@
-package ru.netology.autopayment;
+package ru.netology.tests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
-import ru.netology.data.DataGenerator;
+import ru.netology.data.DataHelper;
 
 import java.time.Duration;
 
@@ -12,14 +12,14 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class OwnerAutoPaymentTest {
+public class AutoPaymentOwnerTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
     }
 
     @BeforeAll
-    static void serUpAll() {
+    static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
@@ -41,16 +41,16 @@ public class OwnerAutoPaymentTest {
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
                 .find("input")
-                .setValue(DataGenerator.getNumberOfErrors());
+                .setValue(DataHelper.getNumberOfErrors());
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidMonth());
+                .setValue(DataHelper.getRandomValidMonth());
         $(byText("Год")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidYear());
+                .setValue(DataHelper.getRandomValidYear());
         $(byText("CVC/CVV")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidCvv());
+                .setValue(DataHelper.getRandomValidCvv());
         $(byText("Продолжить")).click();
         $(byText("Владелец")).parent()
                 .shouldHave(Condition.text("Поле обязательно" +
@@ -75,19 +75,19 @@ public class OwnerAutoPaymentTest {
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
                 .find("input")
-                .setValue(DataGenerator.getNumberOfErrors());
+                .setValue(DataHelper.getNumberOfErrors());
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidMonth());
+                .setValue(DataHelper.getRandomValidMonth());
         $(byText("Год")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidYear());
+                .setValue(DataHelper.getRandomValidYear());
         $(byText("Владелец")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomErrorWithoutSpacesOwner());
+                .setValue(DataHelper.getRandomErrorWithoutSpacesOwner());
         $(byText("CVC/CVV")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidCvv());
+                .setValue(DataHelper.getRandomValidCvv());
         $(byText("Продолжить")).click();
         $(byText("Владелец")).parent()
                 .shouldHave(Condition.text("Неверный формат"),
@@ -111,19 +111,19 @@ public class OwnerAutoPaymentTest {
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
                 .find("input")
-                .setValue(DataGenerator.getNumberOfErrors());
+                .setValue(DataHelper.getNumberOfErrors());
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidMonth());
+                .setValue(DataHelper.getRandomValidMonth());
         $(byText("Год")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidYear());
+                .setValue(DataHelper.getRandomValidYear());
         $(byText("Владелец")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomErrorWithTwoSpacesOwner());
+                .setValue(DataHelper.getRandomErrorWithTwoSpacesOwner());
         $(byText("CVC/CVV")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidCvv());
+                .setValue(DataHelper.getRandomValidCvv());
         $(byText("Продолжить")).click();
         $(byText("Владелец")).parent()
                 .shouldHave(Condition.text("Неверный формат"),

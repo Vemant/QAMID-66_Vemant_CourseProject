@@ -1,9 +1,14 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
+import lombok.Value;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
-public class DataGenerator {
-    private DataGenerator() {
+public class DataHelper {
+    private DataHelper() {
     }
 
     // НОМЕР КАРТЫ
@@ -16,6 +21,7 @@ public class DataGenerator {
     public static String getNumberOfErrors() {
         return "5555 6666 7777 8888";
     }
+
     // Случайный невалидный номер
     public static String getRandomNumber() {
         var faker = new Faker();
@@ -50,13 +56,17 @@ public class DataGenerator {
     // Генерируем ГОД
     public static String getRandomValidYear() {
         var faker = new Faker();
-        return String.valueOf(faker.number().numberBetween(24, 29));
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        return String.valueOf(faker.number().numberBetween(currentYear, currentYear + 6));
     }
 
     public static String getRandomErrorYear() {
         var faker = new Faker();
-        int randomYear = faker.number().numberBetween(29, 100);
-        return String.valueOf(randomYear);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int lastYear = faker.number().numberBetween(currentYear - currentYear + 1, currentYear);
+        int futureYear = faker.number().numberBetween(currentYear + 6, currentYear + 100);
+        String randomYear = String.valueOf(lastYear | futureYear);
+        return randomYear;
     }
 
     // Генерируем ВЛАДЕЛЕЦ
@@ -86,5 +96,14 @@ public class DataGenerator {
     public static String getRandomErrorCvv() {
         var faker = new Faker();
         return String.valueOf(faker.number().numberBetween(1, 100));
+    }
+
+    @Value
+    public static class AuthInfo {
+        String number;
+        String month;
+        String year;
+        String owner;
+        String cvv;
     }
 }

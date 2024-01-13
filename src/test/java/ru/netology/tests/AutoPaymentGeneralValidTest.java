@@ -1,10 +1,10 @@
-package ru.netology.autopayment;
+package ru.netology.tests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
-import ru.netology.data.DataGenerator;
+import ru.netology.data.DataHelper;
 
 import java.time.Duration;
 
@@ -13,14 +13,14 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class GeneralValidAutoPaymentTest {
+public class AutoPaymentGeneralValidTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
     }
 
     @BeforeAll
-    static void serUpAll() {
+    static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
@@ -38,19 +38,19 @@ public class GeneralValidAutoPaymentTest {
                         Duration.ofSeconds(16));
         $(byText("Номер карты")).parent()
                 .find("input")
-                .setValue(DataGenerator.getNumberOfSuccesses());
+                .setValue(DataHelper.getNumberOfSuccesses());
         $(byText("Месяц")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidMonth());
+                .setValue(DataHelper.getRandomValidMonth());
         $(byText("Год")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidYear());
+                .setValue(DataHelper.getRandomValidYear());
         $(byText("Владелец")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidOwner());
+                .setValue(DataHelper.getRandomValidOwner());
         $(byText("CVC/CVV")).parent()
                 .find("input")
-                .setValue(DataGenerator.getRandomValidCvv());
+                .setValue(DataHelper.getRandomValidCvv());
         $(byText("Продолжить")).click();
         $(".notification__title")
                 .shouldBe(Condition.visible,

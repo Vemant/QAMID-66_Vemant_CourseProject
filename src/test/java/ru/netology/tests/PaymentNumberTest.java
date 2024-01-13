@@ -1,4 +1,4 @@
-package ru.netology.payment;
+package ru.netology.tests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -8,12 +8,11 @@ import org.junit.jupiter.api.*;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class NumberPaymentTest {
+public class PaymentNumberTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");

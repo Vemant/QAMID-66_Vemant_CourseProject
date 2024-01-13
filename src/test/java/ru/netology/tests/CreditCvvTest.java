@@ -1,4 +1,4 @@
-package ru.netology.credit;
+package ru.netology.tests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class CvvCreditTest {
+public class CreditCvvTest {
     @BeforeEach
     void setup() {
         open("http://localhost:8080");
