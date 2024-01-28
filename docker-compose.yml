@@ -1,12 +1,10 @@
 version: '3.7'
 services:
-  postgres:
+  mysql:
     image: mysql:8.0.18
     restart: always
     ports:
-      - '8080:8080'
-#    volumes:
-#      - ./data:/var/lib/postgresql/data
+      - '3306:3306'
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_DATABASE=app
