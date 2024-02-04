@@ -5,27 +5,35 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
+import ru.netology.page.CardFieldsPage;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentOwnerTest {
+    CardFieldsPage cardFieldsPage;
     @BeforeEach
-    void setup() {
-        open("http://localhost:8080");
+    void setUp() {
+        cardFieldsPage = open(
+                "http://localhost:8080",
+                CardFieldsPage.class);
     }
 
     @BeforeAll
     static void setUpAll() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
+        SelenideLogger.addListener(
+                "allure",
+                new AllureSelenide());
     }
 
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
+        cleanDatabase();
     }
 
     // Невалидный тест ВЛАДЕЛЕЦ, поле пустое
@@ -35,28 +43,13 @@ public class AutoPaymentOwnerTest {
     @DisplayName("Should get error, " +
             "empty Owner field")
     public void errorEmptyOwnerField() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
-        $(byText("Номер карты")).parent()
-                .find("input")
-                .setValue(DataHelper.getNumberOfErrors());
-        $(byText("Месяц")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidMonth());
-        $(byText("Год")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidYear());
-        $(byText("CVC/CVV")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidCvv());
-        $(byText("Продолжить")).click();
-        $(byText("Владелец")).parent()
-                .shouldHave(Condition.text("Поле обязательно" +
-                                " для заполнения"),
-                        Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
+        CardFieldsPage.choicePaymentMethod();
+        var cardInfo = DataHelper.generateCardOwnerEmptyRestValid();
+        CardFieldsPage.verifyCard(cardInfo);
+        CardFieldsPage.verifyOwner(
+                "Поле обязательно" +
+                        " для заполнения"
+        );
     }
 
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
@@ -69,30 +62,12 @@ public class AutoPaymentOwnerTest {
     @DisplayName("Should get error, " +
             "without space")
     public void errorOwnerWithoutSpace() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
-        $(byText("Номер карты")).parent()
-                .find("input")
-                .setValue(DataHelper.getNumberOfErrors());
-        $(byText("Месяц")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidMonth());
-        $(byText("Год")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidYear());
-        $(byText("Владелец")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomErrorWithoutSpacesOwner());
-        $(byText("CVC/CVV")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidCvv());
-        $(byText("Продолжить")).click();
-        $(byText("Владелец")).parent()
-                .shouldHave(Condition.text("Неверный формат"),
-                        Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
+        CardFieldsPage.choicePaymentMethod();
+        var cardInfo = DataHelper.generateCardOwnerInvalidWithoutSpacesRestValid();
+        CardFieldsPage.verifyCard(cardInfo);
+        CardFieldsPage.verifyOwner(
+                "Неверный формат"
+        );
     }
 
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
@@ -105,30 +80,11 @@ public class AutoPaymentOwnerTest {
     @DisplayName("Should get error, " +
             "2 spaces")
     public void errorOwnerWithTwoSpaces() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
-        $(byText("Номер карты")).parent()
-                .find("input")
-                .setValue(DataHelper.getNumberOfErrors());
-        $(byText("Месяц")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidMonth());
-        $(byText("Год")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidYear());
-        $(byText("Владелец")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomErrorWithTwoSpacesOwner());
-        $(byText("CVC/CVV")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidCvv());
-        $(byText("Продолжить")).click();
-        $(byText("Владелец")).parent()
-                .shouldHave(Condition.text("Неверный формат"),
-                        Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
+        CardFieldsPage.choicePaymentMethod();
+        var cardInfo = DataHelper.generateCardOwnerInvalidTwoSpacesRestValid();
+        CardFieldsPage.verifyCard(cardInfo);
+        CardFieldsPage.verifyOwner(
+                "Неверный формат"
+        );
     }
-
 }

@@ -5,27 +5,36 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
+import ru.netology.page.CardFieldsPage;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentYearTest {
+    CardFieldsPage cardFieldsPage;
     @BeforeEach
-    void setup() {
-        open("http://localhost:8080");
+    void setUp() {
+        cardFieldsPage = open(
+                "http://localhost:8080",
+                CardFieldsPage.class);
     }
 
     @BeforeAll
     static void setUpAll() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
+        SelenideLogger.addListener(
+                "allure",
+                new AllureSelenide());
     }
+
 
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
+        cleanDatabase();
     }
 
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
@@ -37,64 +46,28 @@ public class AutoPaymentYearTest {
     @DisplayName("Should get error, " +
             "empty year field")
     public void errorEmptyYearField() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
-        $(byText("Номер карты")).parent()
-                .find("input")
-                .setValue(DataHelper.getNumberOfErrors());
-        $(byText("Месяц")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidMonth());
-        $(byText("Владелец")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidOwner());
-        $(byText("CVC/CVV")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidCvv());
-        $(byText("Продолжить")).click();
-        $(byText("Год")).parent()
-                .shouldHave(Condition.text("Поле " +
-                                "обязательно для заполнения"),
-                        Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
+        CardFieldsPage.choicePaymentMethod();
+        var cardInfo = DataHelper.generateCardYearEmptyRestValid();
+        CardFieldsPage.verifyCard(cardInfo);
+        CardFieldsPage.verifyYear(
+                "Поле " +
+                        "обязательно для заполнения"
+        );
     }
 
-    // Невалидный тест ГОД, 29 (крайнее невалидное значение)
+    // Невалидный тест ГОД невалидный
     //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: 03
 //    ГОД: invalid
-//    ВЛАДЕЛЕЦ: IVAN IVANOV
-//    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
             "year is invalid")
     public void errorYearIsInvalid() {
-        $(byText("Купить")).click();
-        $(byText("Оплата по карте"))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
-        $(byText("Номер карты")).parent()
-                .find("input")
-                .setValue(DataHelper.getNumberOfErrors());
-        $(byText("Месяц")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidMonth());
-        $(byText("Год")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomErrorYear());
-        $(byText("Владелец")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidOwner());
-        $(byText("CVC/CVV")).parent()
-                .find("input")
-                .setValue(DataHelper.getRandomValidCvv());
-        $(byText("Продолжить")).click();
-        $(byText("Год")).parent()
-                .shouldHave(Condition.text("Неверно указан " +
-                                "срок действия карты"),
-                        Duration.ofSeconds(16))
-                .shouldBe(Condition.visible);
+        CardFieldsPage.choicePaymentMethod();
+        var cardInfo = DataHelper.generateCardYearInvalidRestValid();
+        CardFieldsPage.verifyCard(cardInfo);
+        CardFieldsPage.verifyYear(
+                "Неверно указан " +
+                        "срок действия карты"
+        );
     }
 }
