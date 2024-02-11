@@ -1,27 +1,23 @@
 package ru.netology.tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.page.CardFieldsPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentNumberTest {
-    CardFieldsPage cardFieldsPage;
+    CardFieldsPage cardFieldsPage = new CardFieldsPage();
     @BeforeEach
     void setUp() {
         cardFieldsPage = open(
                 "http://localhost:8080",
                 CardFieldsPage.class);
+        cardFieldsPage.choicePaymentMethod();
+        cardFieldsPage.paymentFieldVisibility();
     }
 
     @BeforeAll
@@ -45,13 +41,12 @@ public class AutoPaymentNumberTest {
     @DisplayName("Should get error, " +
             "non-provided card number")
     public void errorNonProvidedCardNumber() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardNumberInvalidRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyTitleNotification(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyTitleNotification(
                 "Ошибка"
         );
-        CardFieldsPage.verifyContentNotification(
+        cardFieldsPage.verifyContentNotification(
                 "Ошибка! " +
                         "Банк отказал в проведении операции."
         );
@@ -64,10 +59,9 @@ public class AutoPaymentNumberTest {
     @DisplayName("Should get error, " +
             "empty card field")
     public void errorCardFieldEmpty() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardNumberEmptyRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyNumber(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyNumber(
                 "Поле " +
                         "обязательно для заполнения"
         );

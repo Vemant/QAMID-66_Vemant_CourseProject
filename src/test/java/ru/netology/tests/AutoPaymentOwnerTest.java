@@ -1,26 +1,23 @@
 package ru.netology.tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.page.CardFieldsPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentOwnerTest {
-    CardFieldsPage cardFieldsPage;
+    CardFieldsPage cardFieldsPage = new CardFieldsPage();
     @BeforeEach
     void setUp() {
         cardFieldsPage = open(
                 "http://localhost:8080",
                 CardFieldsPage.class);
+        cardFieldsPage.choicePaymentMethod();
+        cardFieldsPage.paymentFieldVisibility();
     }
 
     @BeforeAll
@@ -43,10 +40,9 @@ public class AutoPaymentOwnerTest {
     @DisplayName("Should get error, " +
             "empty Owner field")
     public void errorEmptyOwnerField() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardOwnerEmptyRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyOwner(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyOwner(
                 "Поле обязательно" +
                         " для заполнения"
         );
@@ -62,10 +58,9 @@ public class AutoPaymentOwnerTest {
     @DisplayName("Should get error, " +
             "without space")
     public void errorOwnerWithoutSpace() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardOwnerInvalidWithoutSpacesRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyOwner(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyOwner(
                 "Неверный формат"
         );
     }
@@ -80,10 +75,9 @@ public class AutoPaymentOwnerTest {
     @DisplayName("Should get error, " +
             "2 spaces")
     public void errorOwnerWithTwoSpaces() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardOwnerInvalidTwoSpacesRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyOwner(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyOwner(
                 "Неверный формат"
         );
     }

@@ -1,27 +1,24 @@
 package ru.netology.tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.page.CardFieldsPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentMonthTest {
-    CardFieldsPage cardFieldsPage;
+    CardFieldsPage cardFieldsPage = new CardFieldsPage();
 
     @BeforeEach
     void setUp() {
         cardFieldsPage = open(
                 "http://localhost:8080",
                 CardFieldsPage.class);
+        cardFieldsPage.choicePaymentMethod();
+        cardFieldsPage.paymentFieldVisibility();
     }
 
     @BeforeAll
@@ -45,10 +42,9 @@ public class AutoPaymentMonthTest {
     @DisplayName("Should get error, " +
             "empty month field")
     public void errorEmptyMonthField() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardMonthEmptyRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyMonth(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyMonth(
                 "Поле обязательно для заполнения"
         );
     }
@@ -60,10 +56,9 @@ public class AutoPaymentMonthTest {
     @DisplayName("Should get error, " +
             "error month")
     public void errorMonthIsInvalid() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardMonthInvalidRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyMonth(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyMonth(
                 "Неверно указан " +
                         "срок действия карты"
         );

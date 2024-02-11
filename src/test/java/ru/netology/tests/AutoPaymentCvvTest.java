@@ -1,27 +1,24 @@
 package ru.netology.tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.page.CardFieldsPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentCvvTest {
-    CardFieldsPage cardFieldsPage;
+    CardFieldsPage cardFieldsPage = new CardFieldsPage();
 
     @BeforeEach
     void setUp() {
         cardFieldsPage = open(
                 "http://localhost:8080",
                 CardFieldsPage.class);
+        cardFieldsPage.choicePaymentMethod();
+        cardFieldsPage.paymentFieldVisibility();
     }
 
     @BeforeAll
@@ -46,10 +43,9 @@ public class AutoPaymentCvvTest {
     @DisplayName("Should get error, " +
             "empty CVV field")
     public void errorEmptyCvvField() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardCvvEmptyRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyCvv(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyCvv(
                 "Поле обязательно" +
                         " для заполнения"
         );
@@ -63,10 +59,9 @@ public class AutoPaymentCvvTest {
     @DisplayName("Should get error, " +
             "2 symbols in CVV")
     public void errorCvvTwoSymbols() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardCvvInvalidRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyCvv(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyCvv(
                 "Неверный формат"
         );
     }

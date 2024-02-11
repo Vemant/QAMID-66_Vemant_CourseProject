@@ -6,19 +6,19 @@ import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.page.CardFieldsPage;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-//import static ru.netology.data.SQLHelper.cleanAuthCodes;
 import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentGeneralValidTest {
-    CardFieldsPage cardFieldsPage;
+    CardFieldsPage cardFieldsPage = new CardFieldsPage();
 
     @BeforeEach
     void setUp() {
         cardFieldsPage = open(
                 "http://localhost:8080",
                 CardFieldsPage.class);
+        cardFieldsPage.choicePaymentMethod();
+        cardFieldsPage.paymentFieldVisibility();
     }
 
     @BeforeAll
@@ -37,13 +37,12 @@ public class AutoPaymentGeneralValidTest {
     @Test
     @DisplayName("Should successful make payment")
     void shouldMakePaymentValidValues() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardAllFieldsValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyTitleNotification(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyTitleNotification(
                 "Успешно"
         );
-        CardFieldsPage.verifyContentNotification(
+        cardFieldsPage.verifyContentNotification(
                 "Операция одобрена Банком."
         );
     }

@@ -1,26 +1,23 @@
 package ru.netology.tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.page.CardFieldsPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class AutoPaymentYearTest {
-    CardFieldsPage cardFieldsPage;
+    CardFieldsPage cardFieldsPage = new CardFieldsPage();
     @BeforeEach
     void setUp() {
         cardFieldsPage = open(
                 "http://localhost:8080",
                 CardFieldsPage.class);
+        cardFieldsPage.choicePaymentMethod();
+        cardFieldsPage.paymentFieldVisibility();
     }
 
     @BeforeAll
@@ -46,10 +43,9 @@ public class AutoPaymentYearTest {
     @DisplayName("Should get error, " +
             "empty year field")
     public void errorEmptyYearField() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardYearEmptyRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyYear(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyYear(
                 "Поле " +
                         "обязательно для заполнения"
         );
@@ -62,10 +58,9 @@ public class AutoPaymentYearTest {
     @DisplayName("Should get error, " +
             "year is invalid")
     public void errorYearIsInvalid() {
-        CardFieldsPage.choicePaymentMethod();
         var cardInfo = DataHelper.generateCardYearInvalidRestValid();
-        CardFieldsPage.verifyCard(cardInfo);
-        CardFieldsPage.verifyYear(
+        cardFieldsPage.verifyCard(cardInfo);
+        cardFieldsPage.verifyYear(
                 "Неверно указан " +
                         "срок действия карты"
         );

@@ -15,89 +15,99 @@ public class CardFieldsPage {
     // Закладывание элементов страницы в переменные
     private final SelenideElement heading =
             $(byText("Путешествие дня"));
-    private static final SelenideElement paymentTab =
+    private final SelenideElement paymentTab =
             $(byText("Купить"));
+    private final SelenideElement creditTab =
+            $(byText("Купить в кредит"));
     private final SelenideElement paymentTitle =
             $(byText("Оплата по карте"));
-    private static final SelenideElement numberField =
+    private final SelenideElement creditTitle =
+            $(byText("Кредит по данным карты"));
+    private final SelenideElement numberField =
             $(byText("Номер карты")).parent()
                     .find("input");
-    private static final SelenideElement monthField =
+    private final SelenideElement monthField =
             $(byText("Месяц")).parent()
                     .find("input");
-    private static final SelenideElement yearField =
+    private final SelenideElement yearField =
             $(byText("Год")).parent()
                     .find("input");
-    private static final SelenideElement ownerField =
+    private final SelenideElement ownerField =
             $(byText("Владелец")).parent()
                     .find("input");
-    private static final SelenideElement cvvField =
+    private final SelenideElement cvvField =
             $(byText("CVC/CVV")).parent()
                     .find("input");
-    private static final SelenideElement verifyButton =
+    private final SelenideElement verifyButton =
             $(byText("Продолжить"));
 
-    private static final SelenideElement titleNotification =
+    private final SelenideElement titleNotification =
             $(".notification__title");
-    private static final SelenideElement contentNotification =
+    private final SelenideElement contentNotification =
             $(".notification__content");
 
+    public CardFieldsPage() {
+        heading.shouldBe(visible);
+    }
+
     // Метод, выбирающий способ оплаты
-    public static void choicePaymentMethod() {
-        paymentTab.shouldBe(Condition.visible,
-                Duration.ofSeconds(16));
+    public void choicePaymentMethod() {
+        paymentTab.shouldBe(Condition.visible);
+    }
+
+    public void choiceCreditMethod() {
+        creditTab.shouldBe(Condition.visible);
     }
 
     // Метод проверяющией, что поля ввода карты стали видимы
-    public void cardFieldsVisibility() {
+    public void paymentFieldVisibility() {
         paymentTitle.shouldBe(visible);
     }
 
+    public void creditFieldVisibility() {
+        creditTitle.shouldBe(visible);
+    }
+
     // Методы, проверяющие, что заголовки и надписи под полями видны
-    public static void verifyNumber(String expectedText) {
+    public void verifyNumber(String expectedText) {
         numberField.shouldHave(exactText(expectedText))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
+                .shouldBe(Condition.visible);
     }
 
-    public static void verifyMonth(String expectedText) {
+    public void verifyMonth(String expectedText) {
         monthField.shouldHave(exactText(expectedText))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
+                .shouldBe(Condition.visible);
     }
 
-    public static void verifyYear(String expectedText) {
+    public void verifyYear(String expectedText) {
         yearField.shouldHave(exactText(expectedText))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
+                .shouldBe(Condition.visible);
     }
 
-    public static void verifyOwner(String expectedText) {
+    public void verifyOwner(String expectedText) {
         ownerField.shouldHave(exactText(expectedText))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
+                .shouldBe(Condition.visible);
     }
 
-    public static void verifyCvv(String expectedText) {
+    public void verifyCvv(String expectedText) {
         cvvField.shouldHave(exactText(expectedText))
-                .shouldBe(Condition.visible,
-                        Duration.ofSeconds(16));
+                .shouldBe(Condition.visible);
     }
 
-    public static void verifyTitleNotification(String expectedText) {
+    public void verifyTitleNotification(String expectedText) {
         titleNotification.shouldHave(exactText(expectedText))
                 .shouldBe(Condition.visible,
-                Duration.ofSeconds(16));
+                        Duration.ofSeconds(16));
     }
 
-    public static void verifyContentNotification(String expectedText) {
+    public void verifyContentNotification(String expectedText) {
         contentNotification.shouldHave(exactText(expectedText))
                 .shouldBe(Condition.visible,
                         Duration.ofSeconds(16));
     }
 
     // Метод, вводящий данные в поля карт и нажимающий на кнопку
-    public static void verifyCard(DataHelper.CardInfo info) {
+    public void verifyCard(DataHelper.CardInfo info) {
         numberField.setValue(info.getNumber());
         monthField.setValue(info.getMonth());
         yearField.setValue(info.getYear());
@@ -106,7 +116,5 @@ public class CardFieldsPage {
         verifyButton.click();
     }
 
-    public CardFieldsPage() {
-        heading.shouldBe(visible);
-    }
+
 }
