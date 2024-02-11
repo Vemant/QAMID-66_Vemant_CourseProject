@@ -16,18 +16,17 @@ public class DataHelper {
     // В А Л И Д Н Ы Е  Д А Н Н Ы Е
     // ВАЛИДНЫЙ НОМЕР КАРТЫ
     // Номер для валиндых тестов 1111 2222 3333 4444
-    public static String getNumberOfSuccesses() {
+    public static String getApprovedNumber() {
         return "1111 2222 3333 4444";
     }
 
     // Номер для невалидных тестов 5555 6666 7777 8888
-    public static String getNumberOfErrors() {
+    public static String getDeclinedNumber() {
         return "5555 6666 7777 8888";
     }
 
     // ВАЛИДНЫЙ МЕСЯЦ
     public static String getRandomValidMonth() {
-//        var faker = new Faker();
         int cardMonth = 0;
         while (cardMonth == 0) {
             cardMonth = faker.number().numberBetween(-12, 13);
@@ -43,7 +42,6 @@ public class DataHelper {
 
     // ВАЛИДНЫЙ ГОД
     public static String getRandomValidYear() {
-//        var faker = new Faker();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         String randomYear = String.valueOf(faker.number()
                 .numberBetween(currentYear, currentYear + 6));
@@ -55,13 +53,11 @@ public class DataHelper {
 
     // ВАЛИДНЫЙ ВЛАДЕЛЕЦ
     public static String getRandomValidOwner() {
-//        var faker = new Faker();
         return faker.name().lastName() + " " + faker.name().firstName();
     }
 
     // ВАЛИДНЫЙ CVV
     public static String getRandomValidCvv() {
-//        var faker = new Faker();
         int randomCvv = 0;
         while ((randomCvv > -100) && (randomCvv < 100)) {
             randomCvv = faker.number().numberBetween(-999, 1000);
@@ -73,7 +69,6 @@ public class DataHelper {
     // НЕВАЛИДНЫЙ НОМЕР КАРТЫ
     // Случайный невалидный номер
     public static String getRandomNumber() {
-//        var faker = new Faker();
         int cardLength = 0;
         String randomCard = "";
         while (cardLength != 19) {
@@ -85,7 +80,6 @@ public class DataHelper {
 
     // НЕВАЛИДНЫЙ МЕСЯЦ
     public static String getRandomErrorMonth() {
-//        var faker = new Faker();
         int randomMonth = 0;
         while ((randomMonth >= -12) && (randomMonth <= 12)) {
             randomMonth = faker.number().numberBetween(-100, 100);
@@ -95,7 +89,6 @@ public class DataHelper {
 
     // НЕВАЛИДНЫЙ ГОД
     public static String getRandomErrorYear() {
-//        var faker = new Faker();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int randYear = currentYear;
         while ((randYear >= currentYear)
@@ -112,7 +105,6 @@ public class DataHelper {
 
     // НЕВАЛИДНЫЙ ВЛАДЕЛЕЦ
     public static String getRandomErrorWithoutSpacesOwner() {
-//        var faker = new Faker();
         return faker.name().lastName();
     }
 
@@ -125,14 +117,37 @@ public class DataHelper {
 
     // НЕВАЛИДНЫЙ CVV
     public static String getRandomErrorCvv() {
-//        var faker = new Faker();
         return String.valueOf(faker.number().numberBetween(-99, 100));
     }
 
     // О Б Ъ Е К Т Ы  К А Р Т
-    // ВСЕ ПОЛЯ ВАЛИДНЫ
-    public static CardInfo generateCardAllFieldsValid() {
-        String number = getNumberOfSuccesses();
+    // ВСЕ ПОЛЯ ВАЛИДНЫ, НОМЕР APPROVED
+    public static CardInfo generateValidApprovedCard() {
+        String number = getApprovedNumber();
+        int month = 0;
+        int year = Integer.parseInt(getRandomValidYear());
+        String owner = getRandomValidOwner();
+        String cvv = getRandomValidCvv();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        if (year == currentYear) {
+            while (month < currentMonth) {
+                month = Integer.valueOf(getRandomValidMonth());
+            }
+        } else {
+            month = Integer.valueOf(getRandomValidMonth());
+        }
+        return new CardInfo(
+                number,
+                Integer.toString(month),
+                Integer.toString(year),
+                owner,
+                cvv
+        );
+    }
+
+    public static CardInfo generateValidDeclinedCard() {
+        String number = getDeclinedNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String owner = getRandomValidOwner();
@@ -157,7 +172,7 @@ public class DataHelper {
 
     // НОМЕР КАРТЫ НЕВАЛИДЕН
     // Случайный номер
-    public static CardInfo generateCardNumberInvalidRestValid() {
+    public static CardInfo generateRandomNumberCard() {
         String number = getRandomNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
@@ -182,7 +197,7 @@ public class DataHelper {
     }
 
     // Поле номера пустое
-    public static CardInfo generateCardNumberEmptyRestValid() {
+    public static CardInfo generateEmptyNumberCard() {
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String owner = getRandomValidOwner();
@@ -206,9 +221,9 @@ public class DataHelper {
     }
     // МЕСЯЦ НЕВАЛИДЕН
     // Месяц невозможный
-    public static CardInfo generateCardMonthInvalidRestValid() {
+    public static CardInfo generateErrorMonthCard() {
         return new CardInfo(
-                getNumberOfErrors(),
+                getApprovedNumber(),
                 getRandomErrorMonth(),
                 getRandomValidYear(),
                 getRandomValidOwner(),
@@ -217,9 +232,9 @@ public class DataHelper {
     }
 
     // Поле месяца пустое
-    public static CardInfo generateCardMonthEmptyRestValid() {
+    public static CardInfo generateEmptyMonthCard() {
         return new CardInfo(
-                getNumberOfErrors(),
+                getApprovedNumber(),
                 "",
                 getRandomValidYear(),
                 getRandomValidOwner(),
@@ -229,9 +244,9 @@ public class DataHelper {
 
     // ГОД НЕВАЛИДЕН
     // Год, не соответствующий требованиям
-    public static CardInfo generateCardYearInvalidRestValid() {
+    public static CardInfo generateErrorYearCard() {
         return new CardInfo(
-                getNumberOfErrors(),
+                getApprovedNumber(),
                 getRandomValidMonth(),
                 getRandomErrorYear(),
                 getRandomValidOwner(),
@@ -240,9 +255,9 @@ public class DataHelper {
     }
 
     // Поле года пустое
-    public static CardInfo generateCardYearEmptyRestValid() {
+    public static CardInfo generateEmptyYearCard() {
         return new CardInfo(
-                getNumberOfErrors(),
+                getApprovedNumber(),
                 getRandomValidMonth(),
                 "",
                 getRandomValidOwner(),
@@ -252,8 +267,8 @@ public class DataHelper {
 
     // ВЛАДЕЛЕЦ НЕВАЛИДЕН
     // Пробелов нет
-    public static CardInfo generateCardOwnerInvalidWithoutSpacesRestValid() {
-        String number = getNumberOfErrors();
+    public static CardInfo generateNoSpacesErrorOwnerCard() {
+        String number = getApprovedNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String owner = getRandomErrorWithoutSpacesOwner();
@@ -277,8 +292,8 @@ public class DataHelper {
     }
 
     // Пробелов два
-    public static CardInfo generateCardOwnerInvalidTwoSpacesRestValid() {
-        String number = getNumberOfErrors();
+    public static CardInfo generateTwoSpacesErrorOwnerCard() {
+        String number = getApprovedNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String owner = getRandomErrorWithTwoSpacesOwner();
@@ -302,8 +317,8 @@ public class DataHelper {
     }
 
     // Поле владельца пустое
-    public static CardInfo generateCardOwnerEmptyRestValid() {
-        String number = getNumberOfErrors();
+    public static CardInfo generateEmptyOwnerCard() {
+        String number = getApprovedNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String cvv = getRandomValidCvv();
@@ -326,8 +341,8 @@ public class DataHelper {
     }
 
     // CVV НЕВАЛИДЕН
-    public static CardInfo generateCardCvvInvalidRestValid() {
-        String number = getNumberOfErrors();
+    public static CardInfo generateErrorCvvCard() {
+        String number = getApprovedNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String owner = getRandomValidOwner();
@@ -351,8 +366,8 @@ public class DataHelper {
     }
 
     // Поле cvv пустое
-    public static CardInfo generateCardCvvEmptyRestValid() {
-        String number = getNumberOfErrors();
+    public static CardInfo generateEmptyCvvCard() {
+        String number = getApprovedNumber();
         int month = 0;
         int year = Integer.parseInt(getRandomValidYear());
         String owner = getRandomValidOwner();
@@ -373,6 +388,11 @@ public class DataHelper {
                 ""
         );
     }
+    @Value
+    public static class TransactionStatus {
+        String transactionStatus;
+    }
+
     @Value
     public static class CardInfo {
         String number;

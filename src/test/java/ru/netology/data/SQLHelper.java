@@ -22,25 +22,42 @@ public class SQLHelper {
         );
     }
 
-//    @SneakyThrows
-//    public static DataHelper.VerificationCode getVerificationCode() {
-//        // В переменной codeSQL строкового типа хранится запрос
-//        // в базу данных
-//        var codeSQL =
-//                "SELECT code FROM auth_codes ORDER " +
-//                        "BY created DESC LIMIT 1";
-//        var conn = getConn();
-//        var code = runner.query(
-//                conn,
-//                codeSQL,
-//                new ScalarHandler<String>());
-//        return new DataHelper.VerificationCode(code);
-//
-//    }
+    @SneakyThrows
+    public static DataHelper.TransactionStatus
+    getPaymentTransactionStatus() {
+        var transactionIdSQL =
+                "SELECT status FROM payment_entity " +
+                        "ORDER BY created DESC LIMIT 1";
+        var conn = getConn();
+        var status = runner.query(
+                conn,
+                transactionIdSQL,
+                new ScalarHandler<String>());
+        return new DataHelper.TransactionStatus(status);
+    }
+
+    @SneakyThrows
+    public static DataHelper.TransactionStatus
+    getCreditTransactionStatus() {
+        var transactionIdSQL =
+                "SELECT status FROM credit_request_entity " +
+                        "ORDER BY created DESC LIMIT 1";
+        var conn = getConn();
+        var status = runner.query(
+                conn,
+                transactionIdSQL,
+                new ScalarHandler<String>());
+        return new DataHelper.TransactionStatus(status);
+    }
 
     @SneakyThrows
     public static void cleanDatabase() {
         var connection = getConn();
-        runner.execute(connection, "DELETE FROM cards");
+        runner.execute(connection, "DELETE FROM payment_entity");
+        runner.execute(connection, "DELETE FROM order_entity");
+        runner.execute(
+                connection,
+                "DELETE FROM credit_request_entity"
+        );
     }
 }

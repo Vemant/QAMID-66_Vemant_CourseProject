@@ -36,14 +36,11 @@ public class AutoPaymentCvvTest {
 
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
     //    ========= НИЖЕ БАГ НАДПИСЬ НЕ ТАМ ============
-    // Невалидный тест CVV, поле пустое
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    CVC/CVV: 456
     @Test
     @DisplayName("Should get error, " +
             "empty CVV field")
-    public void errorEmptyCvvField() {
-        var cardInfo = DataHelper.generateCardCvvEmptyRestValid();
+    public void errorPaymentEmptyCvv() {
+        var cardInfo = DataHelper.generateEmptyCvvCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyCvv(
                 "Поле обязательно" +
@@ -51,15 +48,11 @@ public class AutoPaymentCvvTest {
         );
     }
 
-    // Невалидный тест CVV,
-    // крайнее невалидное значение кол-ва символов
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    CVC/CVV: invalid
     @Test
     @DisplayName("Should get error, " +
             "2 symbols in CVV")
-    public void errorCvvTwoSymbols() {
-        var cardInfo = DataHelper.generateCardCvvInvalidRestValid();
+    public void errorPaymentInvalidCvv() {
+        var cardInfo = DataHelper.generateErrorCvvCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyCvv(
                 "Неверный формат"

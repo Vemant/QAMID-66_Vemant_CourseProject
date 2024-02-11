@@ -35,28 +35,22 @@ public class CreditMonthTest {
     }
 
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
-    // Невалидный тест МЕСЯЦ, поле пустое
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: empty
     @Test
     @DisplayName("Should get error, " +
             "empty month field")
-    public void errorEmptyMonthField() {
-        var cardInfo = DataHelper.generateCardMonthEmptyRestValid();
+    public void errorCreditEmptyMonth() {
+        var cardInfo = DataHelper.generateEmptyMonthCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyMonth(
                 "Поле обязательно для заполнения"
         );
     }
 
-    // Невалидный тест МЕСЯЦ невалиден
-//    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    МЕСЯЦ: random error
     @Test
     @DisplayName("Should get error, " +
             "error month")
-    public void errorMonthIsInvalid() {
-        var cardInfo = DataHelper.generateCardMonthInvalidRestValid();
+    public void errorCreditInvalidMonth() {
+        var cardInfo = DataHelper.generateErrorMonthCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyMonth(
                 "Неверно указан " +

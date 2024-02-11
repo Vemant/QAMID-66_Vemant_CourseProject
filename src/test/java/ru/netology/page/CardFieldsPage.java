@@ -115,6 +115,4 @@ public class CardFieldsPage {
         cvvField.setValue(info.getCvv());
         verifyButton.click();
     }
-
-
 }

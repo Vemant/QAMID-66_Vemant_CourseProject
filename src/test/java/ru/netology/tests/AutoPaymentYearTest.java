@@ -27,7 +27,6 @@ public class AutoPaymentYearTest {
                 new AllureSelenide());
     }
 
-
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
@@ -35,15 +34,11 @@ public class AutoPaymentYearTest {
     }
 
     //    ========= НИЖЕ БАГ НЕ ТА НАДПИСЬ ============
-    // Невалидный тест ГОД, поле пустое
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    ГОД: empty
-
     @Test
     @DisplayName("Should get error, " +
             "empty year field")
-    public void errorEmptyYearField() {
-        var cardInfo = DataHelper.generateCardYearEmptyRestValid();
+    public void errorPaymentEmptyYear() {
+        var cardInfo = DataHelper.generateEmptyYearCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyYear(
                 "Поле " +
@@ -51,14 +46,11 @@ public class AutoPaymentYearTest {
         );
     }
 
-    // Невалидный тест ГОД невалидный
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    ГОД: invalid
     @Test
     @DisplayName("Should get error, " +
             "year is invalid")
-    public void errorYearIsInvalid() {
-        var cardInfo = DataHelper.generateCardYearInvalidRestValid();
+    public void errorPaymentInvalidYear() {
+        var cardInfo = DataHelper.generateErrorYearCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyYear(
                 "Неверно указан " +

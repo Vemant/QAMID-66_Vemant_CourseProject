@@ -39,8 +39,8 @@ public class CreditOwnerTest {
     @Test
     @DisplayName("Should get error, " +
             "empty Owner field")
-    public void errorEmptyOwnerField() {
-        var cardInfo = DataHelper.generateCardOwnerEmptyRestValid();
+    public void errorCreditEmptyOwner() {
+        var cardInfo = DataHelper.generateEmptyOwnerCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyOwner(
                 "Поле обязательно" +
@@ -49,16 +49,11 @@ public class CreditOwnerTest {
     }
 
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
-    // Невалидный тест ВЛАДЕЛЕЦ,
-    // валидное кол-во символов без пробелов
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    ВЛАДЕЛЕЦ: without space
-
     @Test
     @DisplayName("Should get error, " +
-            "without space")
-    public void errorOwnerWithoutSpace() {
-        var cardInfo = DataHelper.generateCardOwnerInvalidWithoutSpacesRestValid();
+            "no spaces")
+    public void errorCreditNoSpacesOwner() {
+        var cardInfo = DataHelper.generateNoSpacesErrorOwnerCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyOwner(
                 "Неверный формат"
@@ -66,16 +61,11 @@ public class CreditOwnerTest {
     }
 
     //    ========= НИЖЕ БАГ PASSED ПРИ БАГЕ ============
-    // Невалидный тест ВЛАДЕЛЕЦ,
-    // валидное кол-во символов с двумя пробелами
-    //    НОМЕР КАРТЫ: 5555 6666 7777 8888
-//    ВЛАДЕЛЕЦ: 2 spaces
-
     @Test
     @DisplayName("Should get error, " +
             "2 spaces")
-    public void errorOwnerWithTwoSpaces() {
-        var cardInfo = DataHelper.generateCardOwnerInvalidTwoSpacesRestValid();
+    public void errorCreditTwoSpacesOwner() {
+        var cardInfo = DataHelper.generateTwoSpacesErrorOwnerCard();
         cardFieldsPage.verifyCard(cardInfo);
         cardFieldsPage.verifyOwner(
                 "Неверный формат"
